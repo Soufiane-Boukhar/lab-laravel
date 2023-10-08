@@ -21,6 +21,8 @@ Route::post('/', [StagiaireController::class, 'addStagiaire'])->name('add.stagia
 Route::get('/listStagiaire', [StagiaireController::class, 'show'])->name('show.stagiaire');
 Route::get('/edit/{id}', [StagiaireController::class, 'edit'])->name('edit.stagiaire');
 Route::PATCH('/edit/{id}', [StagiaireController::class, 'updateStagiaire'])->name('update.stagiaire');
+Route::post('/search-stagiaire', [StagiaireController::class, 'searchStagiaire'])->name('search.stagiaire');
+
 
 
 

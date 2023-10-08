@@ -13,6 +13,9 @@
           <a class="nav-link" href="{{ route('show.stagiaire') }}">Liste des stagiaires</a>
         </li>
       </ul>
+      <form class="form-inline my-2 my-lg-0" id="search-form">
+        <input class="form-control mr-sm-2" type="search" placeholder="Recherche" aria-label="Search" name="search" id="search-input">
+      </form>
     </div>
   </div>
 </nav>

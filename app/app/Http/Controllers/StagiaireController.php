@@ -21,7 +21,7 @@ class StagiaireController extends Controller
 
         $stagiaire->save();
 
-        return view('home')->with('success', 'Stagiaire a été ajouté avec succès');
+        return back()->with('success', 'Stagiaire a été ajouté avec succès');
     }
 
     public function show(){
@@ -52,7 +52,24 @@ class StagiaireController extends Controller
     
         return back()->with('success', 'Stagiaire a été mis à jour avec succès');
     }
+
+
+    public function searchStagiaire(Request $request){
+        $searchQuery = $request->input('search');
+    
+        $results = Stagiaire::where('nom', 'like', '%' . $searchQuery . '%')
+            ->orWhere('prenom', 'like', '%' . $searchQuery . '%')
+            ->paginate(2); 
+    
+        return response()->json([
+            'data' => $results->items(), 
+            'links' => $results->links()->toHtml(), 
+        ]);
+    }
+    
+    
+    
+
     
 
 }
-

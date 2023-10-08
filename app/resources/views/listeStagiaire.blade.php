@@ -12,7 +12,8 @@
                 <th scope="col">Action</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody id="search-results">
+            <!-- Add an ID to the tbody -->
             @foreach($stagiaires as $stagiaire)
             <tr>
                 <td>{{$stagiaire->nom}}</td>
@@ -26,12 +27,65 @@
             @endforeach
         </tbody>
     </table>
-    {{$stagiaires->links()}}
+    <div id="pagination-links">
+        {{$stagiaires->links()}}
+    </div>
 </div>
 
+
+
+<script type="module">
+$(document).ready(function () {
+    $('#search-input').on('keyup', function () {
+        var searchInput = $('#search-input').val();
+
+        $.ajax({
+            type: 'POST',
+            url: '/search-stagiaire',
+            data: {
+                search: searchInput,
+                _token: '{{ csrf_token() }}',
+            },
+            success: function (response) {
+                $('#search-results').empty();
+                console.log(response.data);
+                response.data.forEach(function (stagiaire) {
+                    var stagiaireId = stagiaire.id;
+
+                    var editLink = editLink(stagiaireId);
+
+                    var rowHtml = `
+                        <tr>
+                            <td>${stagiaire.nom}</td>
+                            <td>${stagiaire.prenom}</td>
+                            <td>${stagiaire.email}</td>
+                            <td>
+                                <a href="${editLink}" class="btn btn-success">Editer</a>
+                                <button type="button" class="btn btn-danger">Supprimer</button>
+                            </td>
+                        </tr>
+                    `;
+                    $('#search-results').append(rowHtml);
+                });
+
+                $('#pagination-links').html(response.links);
+            },
+            error: function (xhr, status, error) {
+                console.error('AJAX error:', error);
+            }
+        });
+    });
+});
+
+function editLink(stagiaireId) {
+    return `{{ route('edit.stagiaire', ['id' => 'value']) }}`.replace('value', stagiaireId);
+}
+</script>
+
+
+
+
+
+
+
 @endsection
-
-
-
-
-
