@@ -12,8 +12,7 @@
                 <th scope="col">Action</th>
             </tr>
         </thead>
-        <tbody id="search-results">
-            <!-- Add an ID to the tbody -->
+        <tbody id="search-result">
             @foreach($stagiaires as $stagiaire)
             <tr>
                 <td>{{$stagiaire->nom}}</td>
@@ -47,12 +46,12 @@ $(document).ready(function () {
                 _token: '{{ csrf_token() }}',
             },
             success: function (response) {
-                $('#search-results').empty();
+                $('#search-result').empty(); // Use 'search-result' here
                 console.log(response.data);
                 response.data.forEach(function (stagiaire) {
                     var stagiaireId = stagiaire.id;
 
-                    var editLink = editLink(stagiaireId);
+                    var editLinkHref = editLink(stagiaireId); 
 
                     var rowHtml = `
                         <tr>
@@ -60,15 +59,16 @@ $(document).ready(function () {
                             <td>${stagiaire.prenom}</td>
                             <td>${stagiaire.email}</td>
                             <td>
-                                <a href="${editLink}" class="btn btn-success">Editer</a>
+                                <a href="${editLinkHref}" class="btn btn-success">Editer</a>
                                 <button type="button" class="btn btn-danger">Supprimer</button>
                             </td>
                         </tr>
                     `;
-                    $('#search-results').append(rowHtml);
+                    $('#search-result').append(rowHtml); 
                 });
-
                 $('#pagination-links').html(response.links);
+
+
             },
             error: function (xhr, status, error) {
                 console.error('AJAX error:', error);
@@ -78,8 +78,10 @@ $(document).ready(function () {
 });
 
 function editLink(stagiaireId) {
-    return `{{ route('edit.stagiaire', ['id' => 'value']) }}`.replace('value', stagiaireId);
+    return `{{ route('edit.stagiaire', ['id' => ':value']) }}`.replace(':value', stagiaireId);
 }
+
+
 </script>
 
 
