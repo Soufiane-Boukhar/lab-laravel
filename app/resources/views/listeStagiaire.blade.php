@@ -46,7 +46,7 @@ $(document).ready(function () {
                 _token: '{{ csrf_token() }}',
             },
             success: function (response) {
-                $('#search-result').empty(); // Use 'search-result' here
+                $('#search-result').empty(); 
                 console.log(response.data);
                 response.data.forEach(function (stagiaire) {
                     var stagiaireId = stagiaire.id;
